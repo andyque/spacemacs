@@ -41,9 +41,10 @@
         (helm-gitignore :requires helm)
         magit
         (magit-delta :toggle git-enable-magit-delta-plugin)
-        magit-gitflow
+        (magit-gitflow :toggle git-enable-magit-gitflow-plugin)
         magit-section
-        magit-svn
+        (magit-svn :toggle git-enable-magit-svn-plugin)
+        (magit-todos :toggle git-enable-magit-todos-plugin)
         org
         (orgit :requires org)
         (orgit-forge :requires (org forge))
@@ -57,7 +58,8 @@
     (add-to-list 'golden-ratio-exclude-buffer-names " *transient*")))
 
 (defun git/pre-init-evil-collection ()
-  (add-to-list 'spacemacs-evil-collection-allowed-list 'magit))
+  (when (spacemacs//support-evilified-buffer-p)
+    (add-to-list 'spacemacs-evil-collection-allowed-list 'magit)))
 
 (defun git/post-init-fill-column-indicator ()
   (add-hook 'git-commit-mode-hook 'fci-mode))
@@ -241,7 +243,7 @@
       (define-key magit-status-mode-map (kbd "C-S-w")
         'spacemacs/magit-toggle-whitespace)
       ;; Add missing which-key prefixes using the new keymap api
-      (when (spacemacs//support-evilified-buffer-p dotspacemacs-editing-style)
+      (when (spacemacs//support-evilified-buffer-p)
         (which-key-add-keymap-based-replacements magit-status-mode-map
           "gf"  "jump-to-unpulled"
           "gp"  "jump-to-unpushed"))
@@ -267,30 +269,19 @@
       (evil-define-key 'normal magit-section-mode-map (kbd "M-6") 'spacemacs/winum-select-window-6)
       (evil-define-key 'normal magit-section-mode-map (kbd "M-7") 'spacemacs/winum-select-window-7)
       (evil-define-key 'normal magit-section-mode-map (kbd "M-8") 'spacemacs/winum-select-window-8)
-      (evil-define-key 'normal magit-section-mode-map (kbd "M-9") 'spacemacs/winum-select-window-9)
-      ;; Remove inherited bindings from evil-mc and evil-easymotion
-      ;; do this after the config to make sure the keymap is available
-      (which-key-add-keymap-based-replacements magit-mode-map
-        "<normal-state> g r" nil
-        "<visual-state> g r" nil
-        "<normal-state> g s" nil
-        "<visual-state> g s" nil))))
+      (evil-define-key 'normal magit-section-mode-map (kbd "M-9") 'spacemacs/winum-select-window-9))))
 
 (defun git/init-magit-delta ()
   (use-package magit-delta
-    :defer t
-    :init (add-hook 'magit-mode-hook 'magit-delta-mode)))
+    :hook (magit-mode . magit-delta-mode)))
 
 (defun git/init-magit-gitflow ()
   (use-package magit-gitflow
-    :defer t
-    :init (progn
-            (add-hook 'magit-mode-hook 'turn-on-magit-gitflow)
-            (setq magit-gitflow-popup-key "%"))
-    :config
-    (progn
-      (spacemacs|diminish magit-gitflow-mode "Flow")
-      (define-key magit-mode-map "%" 'magit-gitflow-popup))))
+    :hook (magit-mode . magit-gitflow-mode)
+    :init (setq magit-gitflow-popup-key "%")
+    :config (progn
+              (spacemacs|diminish magit-gitflow-mode "Flow")
+              (define-key magit-mode-map "%" 'magit-gitflow-popup))))
 
 (defun git/init-magit-section ()
   (use-package magit-section
@@ -298,12 +289,19 @@
 
 (defun git/init-magit-svn ()
   (use-package magit-svn
-    :if git-enable-magit-svn-plugin
-    :commands turn-on-magit-svn
-    :init (add-hook 'magit-mode-hook 'turn-on-magit-svn)
+    :hook (magit-mode . magit-svn-mode)
     :config (progn
               (spacemacs|diminish magit-svn-mode "SVN")
               (define-key magit-mode-map "~" 'magit-svn))))
+
+(defun git/pre-init-magit-todos ()
+  (when (configuration-layer/layer-used-p 'spacemacs-evil)
+    (add-to-list 'spacemacs-evil-collection-allowed-list 'magit-todos)))
+
+(defun git/init-magit-todos ()
+  (use-package magit-todos
+    :hook (magit-mode . magit-todos-mode)
+    :config (spacemacs|diminish magit-todos-mode "TODOS")))
 
 (defun git/init-orgit ()
   (use-package orgit

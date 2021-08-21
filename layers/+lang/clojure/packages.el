@@ -46,7 +46,6 @@
     counsel-gtags
     helm-gtags
     org
-    parinfer
     popwin
     (sayid :toggle clojure-enable-sayid)
     smartparens
@@ -101,7 +100,7 @@
           (mapc (lambda (x) (spacemacs/declare-prefix-for-mode
                               m (car x) (cdr x)))
                 cider--key-binding-prefixes)
-          (unless (eq (spacemacs//clojure-backend) 'lsp)
+          (unless (eq clojure-backend 'lsp)
             (mapc (lambda (x) (spacemacs/declare-prefix-for-mode
                                 m (car x) (cdr x)))
                   cider--key-binding-non-lsp-prefixes)
@@ -330,7 +329,7 @@
         (dolist (r cljr--all-helpers)
           (let* ((binding (car r))
                  (func (cadr r)))
-            (when (not (string-prefix-p "hydra" (symbol-name func)))
+            (unless (string-prefix-p "hydra" (symbol-name func))
               (spacemacs/set-leader-keys-for-major-mode m
                 (concat "r" binding) func))))))))
 
@@ -379,7 +378,7 @@
           (mapc (lambda (x) (spacemacs/declare-prefix-for-mode
                               m (car x) (cdr x)))
                 clj-refactor--key-binding-prefixes)
-          (unless (eq (spacemacs//clojure-backend) 'lsp)
+          (unless (eq clojure-backend 'lsp)
             (mapc (lambda (x) (spacemacs/declare-prefix-for-mode
                                 m (car x) (cdr x)))
                   clj-refactor--key-binding-non-lsp-prefixes))
@@ -523,9 +522,6 @@
         (unload-feature 'sayid)
         (require 'sayid)
         (setq cider-jack-in-lein-plugins (delete `("com.billpiel/sayid" nil) cider-jack-in-lein-plugins))))))
-
-(defun clojure/post-init-parinfer ()
-  (add-hook 'clojure-mode-hook 'parinfer-mode))
 
 (defun clojure/post-init-flycheck ()
   ;; When user has chosen to use multiple linters.

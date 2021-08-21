@@ -121,8 +121,8 @@
     :defer t
     :init
     (progn
-      (when c++-enable-organize-includes-on-save
-        (add-hook 'c++-mode-hook #'spacemacs/c++-organize-includes-on-save))
+      (when c-c++-enable-organize-includes-on-save
+        (add-hook 'c++-mode-hook #'spacemacs/c-c++-organize-includes-on-save))
 
       (spacemacs/declare-prefix-for-mode 'c++-mode
         "mr" "refactor")
@@ -130,10 +130,10 @@
         "ri" #'spacemacs/c++-organize-includes))))
 
 (defun c-c++/pre-init-dap-mode ()
-  (pcase (spacemacs//c-c++-backend)
-    (`lsp-clangd (add-to-list 'spacemacs--dap-supported-modes 'c-mode)
+  (pcase c-c++-backend
+    ('lsp-clangd (add-to-list 'spacemacs--dap-supported-modes 'c-mode)
                  (add-to-list 'spacemacs--dap-supported-modes 'c++-mode))
-    (`lsp-ccls (add-to-list 'spacemacs--dap-supported-modes 'c-mode)
+    ('lsp-ccls (add-to-list 'spacemacs--dap-supported-modes 'c-mode)
                (add-to-list 'spacemacs--dap-supported-modes 'c++-mode)))
   (add-hook 'c-mode-local-vars-hook #'spacemacs//c-c++-setup-dap)
   (add-hook 'c++-mode-local-vars-hook #'spacemacs//c-c++-setup-dap))

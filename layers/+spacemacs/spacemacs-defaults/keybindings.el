@@ -377,6 +377,7 @@
     ("C-e" spacemacs/force-init-spacemacs-env "Recreate env. variables file")
     ("c" spacemacs/recompile-elpa "Recompile packages")
     ("i" spacemacs/find-user-init-file "Open Emacs \"init.el\"")
+    ("I" spacemacs/find-user-early-init-file "Open Emacs \"early-init.el\"")
     ("d" spacemacs/find-dotfile "Open Spacemacs dotfile")
     ("D" spacemacs/ediff-dotfile-and-template "Diff. with dotfile template")
     ("e" spacemacs/edit-env "Open \".spacemacs.env\"")
@@ -607,7 +608,7 @@ respond to this toggle."
   "ttg" 'timeclock-workday-remaining-string
   "tti" 'timeclock-in
   "ttl" 'timeclock-when-to-leave-string
-  "ttm" 'timeclock-modeline-display
+  "ttm" 'timeclock-mode-line-display
   "tto" 'timeclock-out
   "ttr" 'timeclock-reread-log
   "tts" 'timeclock-status-string

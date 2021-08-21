@@ -31,11 +31,39 @@
 ;; Used for lsp-ui-peek-mode, but may be able to use some spacemacs fn. instead?
 (defun spacemacs/lsp-define-key (keymap key def &rest bindings)
   "Define multiple key bindings with KEYMAP KEY DEF BINDINGS."
-  (interactive)
   (while key
     (define-key keymap (kbd key) def)
     (setq key (pop bindings)
           def (pop bindings))))
+
+(defun spacemacs/lsp-bind-upstream-keys ()
+  "Bind upstream `lsp-command-map' behind \"SPC m\" and the likes."
+  (bind-map lsp-command-map
+    :minor-modes (lsp-mode)
+    :keys ((concat dotspacemacs-emacs-leader-key " m") dotspacemacs-major-mode-emacs-leader-key)
+    :evil-keys ((concat dotspacemacs-leader-key " m") dotspacemacs-major-mode-leader-key)
+    :evil-states (normal motion visual evilified))
+  (dolist (it '(("=" . "format")
+                ("F" . "folder")
+                ("T" . "toggle")
+                ("g" . "goto")
+                ("h" . "help")
+                ("r" . "refactor")
+                ("w" . "workspace")
+                ("a" . "actions")
+                ("G" . "peek")))
+    (which-key-add-keymap-based-replacements lsp-command-map (car it) (cdr it)))
+  ;; we still have to bind keys for `lsp-ivy' and `helm-lsp'
+  (cond
+   ((configuration-layer/package-usedp 'ivy)
+    (spacemacs/lsp-define-key lsp-command-map
+                              "gs" #'lsp-ivy-workspace-symbol
+                              "gS" #'lsp-ivy-global-workspace-symbol
+                              "FR" #'lsp-ivy-workspace-folders-remove))
+   ((configuration-layer/package-usedp 'helm)
+    (spacemacs/lsp-define-key lsp-command-map
+                              "gs" #'helm-lsp-workspace-symbol
+                              "gS" #'helm-lsp-global-workspace-symbol))))
 
 (defun spacemacs/lsp-bind-keys ()
   "Define key bindings for the lsp minor mode."
@@ -274,6 +302,10 @@ EXTRA is an additional parameter that's passed to the LSP function"
 (defun spacemacs//lsp-action-placeholder ()
   (interactive)
   (message "Not supported yet... (to be implemented in 'lsp-mode')"))
+
+(defun spacemacs//lsp-client-server-id ()
+  "Return the ID of the LSP server associated with current project."
+  (mapcar 'lsp--client-server-id (mapcar 'lsp--workspace-client (lsp-workspaces))))
 
 
 ;; ivy integration

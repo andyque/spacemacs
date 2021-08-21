@@ -89,11 +89,6 @@
         (add-hook 'css-mode-hook
                   #'spacemacs//setup-lsp-for-web-mode-buffers t))
 
-      ;; Explicitly run prog-mode hooks since css-mode does not derive from
-      ;; prog-mode major-mode in Emacs 24 and below.
-      (when (version< emacs-version "25")
-        (add-hook 'css-mode-hook 'spacemacs/run-prog-mode-hooks))
-
       (spacemacs/declare-prefix-for-mode 'css-mode "m=" "format")
       (spacemacs/declare-prefix-for-mode 'css-mode "mg" "goto")
       (spacemacs/declare-prefix-for-mode 'css-mode "mz" "foldz")
@@ -116,6 +111,7 @@
       (spacemacs|hide-lighter emmet-mode))))
 
 (defun html/post-init-evil-matchit ()
+  (evilmi-load-plugin-rules '(web-mode) '(simple template html))
   (add-hook 'web-mode-hook 'turn-on-evil-matchit-mode))
 
 (defun html/post-init-flycheck ()
