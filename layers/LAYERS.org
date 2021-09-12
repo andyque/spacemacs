@@ -181,6 +181,7 @@
 - [[#readers][Readers]]
   - [[#dash][Dash]]
   - [[#deft][Deft]]
+  - [[#djvu][Djvu]]
   - [[#elfeed][Elfeed]]
   - [[#epub][Epub]]
   - [[#pdf][PDF]]
@@ -257,8 +258,13 @@
   - [[#confluence][Confluence]]
   - [[#eaf][Eaf]]
   - [[#evernote][Evernote]]
+  - [[#hacker-news][Hacker News]]
+  - [[#layer-for-reddit][Layer for reddit]]
+  - [[#lobsters][Lobsters]]
   - [[#pocket][Pocket]]
   - [[#search-engine][Search Engine]]
+  - [[#streamlink][Streamlink]]
+  - [[#twitch][Twitch]]
   - [[#twitter][Twitter]]
   - [[#wakatime][Wakatime]]
 
@@ -1102,6 +1108,7 @@ This layer adds tools for better integration of Emacs in NixOS.
 
 Features:
 - Nix-mode using [[https://github.com/NixOS/nix-mode][nix-mode]]
+- Automatic formatting via [[https://github.com/serokell/nixfmt][nixfmt]]
 - Auto-completion of NixOS Options using [[https://github.com/travisbhartwell/nix-emacs/blob/master/company-nixos-options.el][company-nixos-options]]
 - Helm Lookup for NixOS Options [[https://github.com/travisbhartwell/nix-emacs/blob/master/helm-nixos-options.el][helm-nixos-options]]
 
@@ -1229,6 +1236,7 @@ Features:
 - Syntax highlighting for BibTeX and BibLaTeX files.
 - Utilities for automatically adding entries from different data sources.
 - Support for inserting citations in various other modes.
+- Optionally install full fledged [[https://joostkremers.github.io/ebib/ebib-manual.html][ebib reference manager]]
 
 **** CSV
 [[file:+lang/csv/README.org][+lang/csv/README.org]]
@@ -1458,6 +1466,7 @@ Features:
 - =Sh= scripts linting using [[https://www.shellcheck.net/][shellcheck]]
 - =Sh= scripts style checking using [[https://github.com/openstack-dev/bashate][bashate]]
 - Support for the [[https://langserver.org/][Language Server Protocol]] (experimental)
+- Automatic formatting via [[https://github.com/mvdan/sh][shfmt]]
 
 **** Vimscript language
 [[file:+lang/vimscript/README.org][+lang/vimscript/README.org]]
@@ -1870,7 +1879,8 @@ Features:
 - Auto-completion via company (=auto-completion= layer required)
 - Support code reformatting with [[http://clang.llvm.org/docs/ClangFormat.html][clang-format]].
 - Support for disassembly of code with [[https://github.com/jart/disaster][disaster]].
-- =sematic= layer integration:
+- [[https://www.doxygen.nl][Doxygen]] code documentation comment generation (using [[https://github.com/mp81ss/gendoxy][gendoxy]]).
+- =semantic= layer integration:
   - Function or variable definition at the bottom
   - Current function cursor is at the top. See [[https://github.com/tuhdo/semantic-stickyfunc-enhance][stickyfunc-demos]] for
     demos in some programming languages.
@@ -1965,6 +1975,7 @@ Features:
 - Outline
 - Workspace Symbols
 - Code Folding
+- Interactive debugger using [[https://github.com/emacs-lsp/dap-mode][dap-mode]]
 
 **** F#
 [[file:+lang/fsharp/README.org][+lang/fsharp/README.org]]
@@ -2422,6 +2433,25 @@ Features:
 - Integration of =org-mode= as note editor.
 - Configurable list of extensions to recognize as notes.
 - Zettelkasten system with [[https://github.com/EFLS/zetteldeft][zetteldeft]]
+
+** Djvu
+[[file:+readers/djvu/README.org][+readers/djvu/README.org]]
+
+This layer adds support for reading djvu files with spacemacs.
+
+Because of some difficulties, the layer does not lazy load the =djvu.el= and
+=djvu3.el= packages.
+
+Features:
+
+This layer provides a full featured djvu editor by implementing the [[https://github.com/dalanicolai/djvu2.el][djvu.el
+package]] along with the [[https://github.com/dalanicolai/djvu3][djvu3]] extension (a newer alternative to [[https://github.com/dalanicolai/djvu2.el][djvu2.el]]).
+- flexible annotation editing and rendering, covering most (but not all) of
+  [[https://linux.die.net/man/1/djvused][djvused]] annotation definitions
+- fast navigation with imenu
+- fast search with djvu-occur
+- remember last view with djvu-restore
+- dark mode
 
 ** Elfeed
 [[file:+readers/elfeed/README.org][+readers/elfeed/README.org]]
@@ -3263,6 +3293,34 @@ Features:
 - Search for notes using keywords
 - Move notes between notebooks
 
+** Hacker News
+[[file:+web-services/hackernews/README.org][+web-services/hackernews/README.org]]
+
+This layer adds support for reading [[https://news.ycombinator.com/][Hacker News]].
+
+Features:
+- Read Hacker News
+
+** Layer for reddit
+[[file:+web-services/reddit/README.org][+web-services/reddit/README.org]]
+
+This layer adds Reddit support to Spacemacs via the package [[https://github.com/thanhvg/emacs-reddigg][reddigg]].
+This package allows you to browse reddit in org-mode.
+
+Features:
+- Activities on Reddit
+  - Viewing main
+  - Viewing sub
+  - Viewing comments
+
+** Lobsters
+[[file:+web-services/lobsters/README.org][+web-services/lobsters/README.org]]
+
+This layer adds support for reading [[https://lobste.rs/][lobsters]].
+
+Features:
+- Read Lobsters news
+
 ** Pocket
 [[file:+web-services/pocket/README.org][+web-services/pocket/README.org]]
 
@@ -3283,6 +3341,25 @@ This layer adds support for the [[https://github.com/hrs/engine-mode][Search Eng
 
 Features:
 - Browser search integration
+
+** Streamlink
+[[file:+web-services/streamlink/README.org][+web-services/streamlink/README.org]]
+
+This layer adds support for opening URLs in streamlink.
+
+Features:
+- Open URL with streamlink
+
+** Twitch
+[[file:+web-services/twitch/README.org][+web-services/twitch/README.org]]
+
+This layer adds support for twitch. You can search for streamers and open the stream in the browser.
+You are also able to connect to twitch irc and join the streamer channel.
+
+Features:
+- Connect to Twitch irc via erc
+- Join streamer channel
+- Start watching stream via streamlink
 
 ** Twitter
 [[file:+web-services/twitter/README.org][+web-services/twitter/README.org]]

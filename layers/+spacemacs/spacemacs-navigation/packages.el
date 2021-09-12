@@ -31,7 +31,7 @@
         (view :location built-in)
         golden-ratio
         (grep :location built-in)
-        (info+ :location local)
+        (info+ :location (recipe :fetcher wiki))
         open-junk-file
         paradox
         restart-emacs
@@ -307,8 +307,12 @@
                    " *which-key*"))
         (add-to-list 'golden-ratio-exclude-buffer-names n))
 
-      (add-to-list 'golden-ratio-inhibit-functions
-                   'spacemacs/no-golden-ratio-guide-key)
+      ;; golden-ratio-inhibit-functions
+      (dolist (f '(spacemacs/no-golden-ratio-guide-key
+                   spacemacs//ediff-in-comparison-buffer-p))
+        (add-to-list 'golden-ratio-inhibit-functions f))
+
+      (add-hook 'ediff-startup-hook 'spacemacs/ediff-balance-windows)
 
       (spacemacs|diminish golden-ratio-mode " ⓖ" " g"))))
 
@@ -323,6 +327,7 @@
     :defer t
     :init
     (progn
+      (spacemacs/set-leader-keys "hj" 'info-display-manual)
       (setq Info-fontify-angle-bracketed-flag nil)
       (add-hook 'Info-mode-hook (lambda () (require 'info+))))))
 
